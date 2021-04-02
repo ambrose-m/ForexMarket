@@ -9,7 +9,7 @@ import selectors
 from datetime import datetime, timedelta
 import time
 import random
-import fxp_bytes
+import marshal
 
 
 REQUEST_ADDRESS = ('localhost', 50411)
@@ -79,7 +79,7 @@ class Publisher(object):
                 quotes.append({'cross': 'CAD/{}'.format(yyy), 'price': rate*2})
 
         # send the messages to current subscribers
-        message = fxp_bytes.marshal_message(quotes)
+        message = marshal.marshal_message(quotes)
         for subscriber in self.subscriptions:
             print('publishing {} to {}'.format(quotes, subscriber))
             self.socket.sendto(message, subscriber)
@@ -114,7 +114,7 @@ class Provider(object):
 
     def register_subscription(self):
         data, _address = self.subscription_requests.recvfrom(REQUEST_SIZE)
-        subscriber = fxp_bytes.deserialize_address(data)
+        subscriber = marshal.deserialize_address(data)
         self.publisher.register_subscription(subscriber)
 
     @staticmethod
@@ -135,5 +135,5 @@ if __name__ == '__main__':
         print('Pick your own port for testing!')
         print('Modify REQUEST_ADDRESS above to use localhost and some random port')
         exit(1)
-    fxp = Provider(REQUEST_ADDRESS, Publisher)
-    fxp.run_forever()
+    p = Provider(REQUEST_ADDRESS, Publisher)
+    p.run_forever()
