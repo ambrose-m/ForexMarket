@@ -1,7 +1,3 @@
 # ForexMarket
 
-Runs on a Linux server.
-
-Start the server with the command line: python3 server.py
-
-Start the client with the command line: python3 forexmarket.py
+This program finds financial arbitrage opportunities by using the Bellman-Ford algorithm to detect negative cycles. Runs on a Linux server.
